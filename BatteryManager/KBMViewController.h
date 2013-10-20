@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "KBMBatteryManager.h"
 
 @interface KBMViewController : UIViewController
 

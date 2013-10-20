@@ -7,12 +7,33 @@
 //
 
 #import "KBMAppDelegate.h"
+#import <Crashlytics/Crashlytics.h>
+#import "Flurry.h"
+#import "KBMBatteryManager.h"
 
 @implementation KBMAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
+    
+    // Crashlytics 初期化 絶対一番上
+    [Crashlytics startWithAPIKey:@"134f98bed84563329183f9853f108d9632d03cf2"];
+    
+    // Flurry 初期化 クラッシュレポートは競合しちゃうので NOに
+    //note: iOS only allows one crash reporting tool per app; if using another, set to: NO
+    //[Flurry setCrashReportingEnabled:NO];
+    //TODO:API Key 変更
+    //[Flurry startSession:@"APIKEY"];
+    
+    // logイベント
+    // TODO:あとで設計を考える
+    //[Flurry logEvent:@"didFinishLaunch"];
+
+    
+    //backgroundfetchの設定
+    [[UIApplication sharedApplication] setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
+    
     return YES;
 }
 							
@@ -43,4 +64,11 @@
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
 
+- (void)application:(UIApplication *)application performFetchWithCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
+{
+    //バッテリー情報の更新や通知の設定
+    [[KBMBatteryManager sharedManager] batteryLevelDidChange];
+    
+    completionHandler(UIBackgroundFetchResultNewData);
+}
 @end

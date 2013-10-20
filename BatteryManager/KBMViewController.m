@@ -8,6 +8,7 @@
 
 #import "KBMViewController.h"
 
+
 @interface KBMViewController ()
 
 @end
@@ -18,6 +19,8 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
+    [self.view addSubview:[[KBMBatteryManager sharedManager] batteryLabel]];
+    
 }
 
 - (void)didReceiveMemoryWarning
